@@ -1,6 +1,19 @@
 * {
   margin: 0;
+  text-align: center;
 }
+
+.start {
+  padding: 10px 20px;
+  border: none;
+  background-color: #eee;
+  color: white;
+  font-size: 20px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.start:hover { background-color: pink; }
 
 .grid {
   margin-left: auto;
@@ -24,5 +37,5 @@
 }
 
 .fixed {
-  background-color: blue; 
+  background-color: blue;
 }
