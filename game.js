@@ -139,9 +139,7 @@ $(document).ready(function(){
   });
 
   function clearLines(){
-    console.log('checking for clearable lines');
     for (var row=1; row <= numberOfRows; row++){
-      console.log(rowFill);
       var rowFill = [];
       var rowCode = row;
       if (row < 10){
@@ -161,6 +159,32 @@ $(document).ready(function(){
             var index = occupiedBlocks.indexOf(rowFill[i]);
             occupiedBlocks.splice(index, 1);
             unoccupiedBlocks.push(rowFill[i]);
+          };
+        };
+      };
+    };
+
+    for (var column=1; column <= numberOfColumns; column++){
+      console.log('checking for clearable columns');
+      var columnFill = [];
+      var columCode = column;
+      if (column < 10){
+        columnCode = '0' + column;
+      };
+      for (var row=1; row <= numberOfRows; row++){
+        var rowCode = row;
+        if (row < 10){
+          rowCode = '0' + row;
+        };
+        var blockCode = String(rowCode) + String(columnCode);
+        if ($('#' + blockCode).hasClass('occupied') == true){
+          columnFill.push(blockCode);
+        };
+        if (columnFill.length == numberOfRows){
+          for (var i=0; i < columnFill.length; i++){
+            var index = occupiedBlocks.indexOf(columnFill[i]);
+            occupiedBlocks.splice(index, 1);
+            unoccupiedBlocks.push(columnFill[i]);
           };
         };
       };
