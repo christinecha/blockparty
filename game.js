@@ -8,6 +8,7 @@ $(document).ready(function(){
   var numberOfColumns = 10;
   var rowMovement;
   var columnMovement;
+  var activeBlock;
 
   //build grid
   for (var row = 1; row <= numberOfRows; row++){
@@ -53,6 +54,9 @@ $(document).ready(function(){
     var randomBlock = unoccupiedBlocks[random];
     unoccupiedBlocks.splice(random, 1);
     occupiedBlocks.push(randomBlock);
+    activeBlock = randomBlock;
+    // $('.block').removeClass('selected');
+    // $('#' + randomBlock).addClass('selected');
   };
 
 
@@ -68,8 +72,47 @@ $(document).ready(function(){
     return aColumn < bColumn ? 1 : aColumn > bColumn ? -1 : 0;
   };
 
+  function moveSingleBlock(){
+    //get current Block Position info
+    var rowCode = activeBlock.slice(0,2);
+    var columnCode = activeBlock.slice(2);
+    var currentBlockCode = rowCode + columnCode;
+    //get new Block Position info
+    var newRowCode = parseInt(rowCode) + rowMovement;
+    var newColumnCode = parseInt(columnCode) + columnMovement;
+    if (newRowCode <= 1){
+      newRowCode = 1;
+    } else if (newRowCode >= numberOfRows){
+      newRowCode = numberOfRows;
+    };
+    if (newColumnCode <= 1){
+      newColumnCode = 1;
+    } else if (newColumnCode >= numberOfColumns){
+      newColumnCode = numberOfColumns;
+    };
+    if (newRowCode < 10){
+      newRowCode = '0' + newRowCode;
+    };
+    if (newColumnCode < 10){
+      newColumnCode = '0' + newColumnCode;
+    };
+    var newBlockCode = String(newRowCode) + String(newColumnCode);
+    var neighbor = occupiedBlocks.indexOf(newBlockCode);
+    //if the block is already occupied
+    if (neighbor != -1){
+    //make 'em both disappear
+    } else {
+      var index = unoccupiedBlocks.indexOf(newBlockCode);
+      var index2 = occupiedBlocks.indexOf(currentBlockCode);
+      unoccupiedBlocks.splice(index, 1);
+      unoccupiedBlocks.push(currentBlockCode);
+      occupiedBlocks.push(newBlockCode);
+      occupiedBlocks.splice(index2, 1);
+    };
+  };
 
-  function moveBlocks(){
+
+  function moveAllBlocks(){
     for (var i = 0; i < occupiedBlocks.length; i++){
       //get current Block Position info
       var rowCode = occupiedBlocks[i].slice(0,2);
@@ -131,7 +174,8 @@ $(document).ready(function(){
         rowMovement = 0;
         columnMovement = -1;
       };
-      moveBlocks();
+      moveAllBlocks();
+      // moveSingleBlock();
       chooseRandomBlock();
       markUnoccupied();
       markOccupied();
@@ -165,9 +209,8 @@ $(document).ready(function(){
     };
 
     for (var column=1; column <= numberOfColumns; column++){
-      console.log('checking for clearable columns');
       var columnFill = [];
-      var columCode = column;
+      var columnCode = column;
       if (column < 10){
         columnCode = '0' + column;
       };
@@ -179,6 +222,7 @@ $(document).ready(function(){
         var blockCode = String(rowCode) + String(columnCode);
         if ($('#' + blockCode).hasClass('occupied') == true){
           columnFill.push(blockCode);
+          console.log('clearable columns:' + columnFill);
         };
         if (columnFill.length == numberOfRows){
           for (var i=0; i < columnFill.length; i++){
